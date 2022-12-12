@@ -1,0 +1,13 @@
+---
+- hosts: server2
+  become: true
+
+  tasks:
+   - name: Install, configure, and start Apache
+     block:
+      - name: Install httpd and memcached
+        apt:
+          name:
+          - memcached
+          state: present
+     when: ansible_os_family == "Debian"

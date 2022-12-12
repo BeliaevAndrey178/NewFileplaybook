@@ -1,0 +1,33 @@
+
+- name: Install Apache and Upload my Web Page to Nginx
+  hosts: all
+  become: yes
+
+
+  vars:
+      source_file: /etc/ansible/index.html
+      destin_file: /var/www/html
+
+  tasks:
+    - name: Install Apach Server
+      ansible.builtin.apt:
+        name: apache2
+        state: latest
+      become: yes
+
+    - name: CopyMyHomeOage to Server
+      ansible.builtin.copy:
+        src: /etc/ansible/index.html
+        dest: /var/www/html
+      notify:
+        - restart apache2 
+      become: yes
+
+  handlers: 
+    - name: restart apache2
+      ansible.builtin.service: 
+        name: apache2
+        state: restarted
+      become: yes
+
+

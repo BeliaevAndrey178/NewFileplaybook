@@ -1,0 +1,27 @@
+---
+- hosts: "{{host_play}}"
+  vars_prompt:
+    
+    - name: host_play
+      prompt: what is your host? 
+      private: no
+
+    - name: user_name
+      prompt: what is your user_name?
+      private: no
+
+    - name: user_passwd
+      prompt: what is your password?
+      private: yes
+      encrypt: sha512_crypt
+      confirm: yes
+      unsafe: yes
+
+
+  tasks:
+
+    - name: passwd update
+      user:
+        name: "{{user_name}}"
+        update_password: always
+        password: "{{ user_passwd }}"

@@ -1,0 +1,62 @@
+
+- name: Install Apache and Upload my Web Page to Nginx
+  hosts: all
+  become: yes
+
+  vars:
+      source_file: ./etc/ansible/index.html
+      destin_file: /var/www/html
+
+  tasks:
+    - name: Chek and Print linux System
+      debug: var=ansible_os_family
+
+    - blok:  
+        - name: Install Apach Server for RedHat
+          yum:
+          name: httpd
+          state: latest
+        - name: start Apach Server it on every boot RedHat
+          service:
+          name: apache2
+          state: started
+          enable: yes
+        - name: CopyMyHomeOage to Server
+          copy: src=({ source_file }) dest=({ destin_file }) mode=0555
+          notify: Restart Apache2 RedHat
+          become: yes
+      when: ansible_os_family == "RedHat"
+
+    - blok:
+        - name: Install Apach Server for Debian
+          apt:
+          name: apache2
+          state: latest
+          name: start Apach Server it on every boot Debian
+          service:
+          name: apache2
+          state: started
+          enable: yes
+        - name: CopyMyHomeOage to Server
+          copy: src=({ source_file }) dest=({ destin_file }) mode=0555
+          notify: Restart Apache2 Debian
+          become: yes
+      when: ansible_os_family == "Debian"
+
+ #handlers:
+ #       - name: Restart Apache2 RedHat
+ #         ansible.builtin.service:
+ #         name: httpd
+ #         state: restarted
+ #         become: yes
+  
+   
+ #handlers: 
+ #      - name: Restart Apache2 Debian
+ #         ansible.builtin.service: 
+ #         name: apache2
+ #         state: restarted
+ #         become: yes
+
+
+

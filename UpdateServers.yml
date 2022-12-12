@@ -1,0 +1,15 @@
+---
+- hosts: "{{host_play}}"
+  vars_prompt:
+     - name: host_play
+       prompt: what is your host?
+       private: no
+
+  become: true
+  tasks:
+  - name: Update and upgrade apt packages
+    apt:
+      upgrade: yes
+      update_cache: yes
+      force_apt_get: yes
+      cache_valid_time: 3600

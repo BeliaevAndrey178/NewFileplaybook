@@ -1,0 +1,22 @@
+
+- name: PLaybok for test variables
+  hosts: all
+  become: yes
+
+  vars: 
+    mesage1: Opa
+    mesage2: Papa
+    secret: JDJDJDJDJDJDJDJDJ
+
+  tasks:
+  - name: Prin Secret variable
+    debug:
+      var: secret
+  - debug:
+      msg: "Opa chto napisano: {{ secret }}"
+
+  - shell: uptime
+    register: results
+
+  - debug:
+      var: results.stdout 
