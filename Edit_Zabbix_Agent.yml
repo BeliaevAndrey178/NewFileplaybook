@@ -1,0 +1,23 @@
+---
+- hosts: "{{host_play}}"
+  vars_prompt:
+    - name: host_play
+      prompt: What is your host?
+      private: no
+
+  tasks:
+
+  - name: edit hostname
+    lineinfile: dest=/etc/zabbix/zabbix_agentd.conf regexp='^Hostname=' insertbefore=BOF line='Hostname={{ ansible_hostname }}'
+    become: true
+    tags: edit_hostname
+
+  - name: edit server
+    lineinfile: dest=/etc/zabbix/zabbix_agentd.conf regexp='^Server='  line='Server='
+    become: true
+    tags: edit_server
+
+  - name: restart zabbix
+    service: name=zabbix-agent state=restarted
+    become: true
+    tags: restart_zabbix
